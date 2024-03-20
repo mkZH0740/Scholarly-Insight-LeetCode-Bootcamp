@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 
-from .arxiv_api import ArxivQuery
+from arxiv_api import ArxivQuery
 
 app = Flask(__name__)
 api = Api(app)
