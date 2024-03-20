@@ -6,7 +6,7 @@ from typing import Dict, List
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
-from .utils import build_search_query
+from .utils import build_search_query, parse_arxiv_feed
 
 
 def make_err(message: str):
@@ -41,9 +41,13 @@ class ArxivQuery(Resource):
         )
 
         with urlopen(endpoint) as query_request:
-            result = query_request.read().decode(
+            feed = query_request.read().decode(
                 query_request.headers.get_content_charset()
             )
 
-        print(result)
-        return {"value": result}
+        status, value = parse_arxiv_feed(feed)
+
+        if status:
+            return {"status": status, "value": [entry.to_dict() for entry in value]}
+        else:
+            return {"status": status, "message": value}
