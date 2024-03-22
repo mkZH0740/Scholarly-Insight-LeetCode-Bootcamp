@@ -1,7 +1,7 @@
 from flask import request
 from flask_restful import Resource
 
-from typing import Dict, List
+from typing import Any, List
 
 from urllib.parse import urlencode
 from urllib.request import urlopen
@@ -11,6 +11,10 @@ from .utils import build_search_query, parse_arxiv_feed
 
 def make_err(message: str):
     return {"status": False, "error": message}
+
+
+def make_ok(value: Any):
+    return {"status": True, "value": value}
 
 
 class ArxivQuery(Resource):
@@ -45,9 +49,9 @@ class ArxivQuery(Resource):
                 query_request.headers.get_content_charset()
             )
 
-        status, value = parse_arxiv_feed(feed)
+        status, result = parse_arxiv_feed(feed)
 
         if status:
-            return {"status": status, "value": [entry.to_dict() for entry in value]}
+            return make_ok(value=[entry.to_dict() for entry in result])
         else:
-            return {"status": status, "message": value}
+            return make_err(message=result)
