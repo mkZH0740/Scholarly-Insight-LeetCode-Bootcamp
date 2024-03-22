@@ -14,21 +14,21 @@ arxiv_feed_namespace = {
 }
 
 
-def is_valid_query(query: Dict[str, str]):
+def is_valid_query(query: Dict[str, str]) -> bool:
     return "key" in query and "value" in query
 
 
-def stringify_query(query: Dict[str, str]):
+def stringify_query(query: Dict[str, str]) -> str:
     return f"{query['key']}:{query['value']}"
 
 
-def build_search_query(queries: List[Dict[str, str]]):
+def build_search_query(queries: List[Dict[str, str]]) -> str:
     return " AND ".join(
         [stringify_query(query) for query in queries if is_valid_query(query)]
     )
 
 
-def parse_author(author_element: Element):
+def parse_author(author_element: Element) -> ArxivArticleAuthor:
     author_name = (
         author_element.find("atom:name", arxiv_feed_namespace).text or "unknown author"
     )
@@ -42,7 +42,7 @@ def parse_author(author_element: Element):
     return author
 
 
-def parse_entry(entry_element: Element):
+def parse_entry(entry_element: Element) -> ArxivArticleEntry:
     id: str = entry_element.find("atom:id", arxiv_feed_namespace).text or "unknown id"
     title: str = (
         entry_element.find("atom:title", arxiv_feed_namespace).text or "unknown title"
