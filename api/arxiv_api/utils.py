@@ -4,7 +4,7 @@ from xml.etree.ElementTree import Element
 
 from .models import ArxivArticleAuthor, ArxivArticleEntry
 
-from typing import List, Dict, Tuple, Literal
+from typing import List, Dict, Tuple, Literal, Union
 
 
 arxiv_feed_namespace = {
@@ -122,7 +122,7 @@ def parse_entry(entry_element: Element) -> ArxivArticleEntry:
 
 def parse_arxiv_feed(
     feed: str,
-) -> Tuple[Literal[False], str] | Tuple[Literal[True], List[ArxivArticleEntry]]:
+) -> Union[Tuple[Literal[False], str], Tuple[Literal[True], List[ArxivArticleEntry]]]:
     root = ET.fromstring(feed)
     entries = root.findall("atom:entry", arxiv_feed_namespace)
 
