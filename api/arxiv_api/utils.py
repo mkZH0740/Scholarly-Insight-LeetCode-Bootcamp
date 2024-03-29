@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ET
-import datetime
+import dateutil.parser
 from xml.etree.ElementTree import Element
 
 from .models import ArxivArticleAuthor, ArxivArticleEntry
@@ -47,10 +47,10 @@ def parse_entry(entry_element: Element) -> ArxivArticleEntry:
     title: str = (
         entry_element.find("atom:title", arxiv_feed_namespace).text or "unknown title"
     )
-    published = datetime.datetime.fromisoformat(
+    published = dateutil.parser.isoparse(
         entry_element.find("atom:published", arxiv_feed_namespace).text
     )
-    updated = datetime.datetime.fromisoformat(
+    updated = dateutil.parser.isoparse(
         entry_element.find("atom:updated", arxiv_feed_namespace).text
     )
     summary: str = (
