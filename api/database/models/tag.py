@@ -1,4 +1,4 @@
-from api.database import db
+from api.database import db, ma
 from typing import List
 from sqlalchemy import Integer, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -19,3 +19,8 @@ class Tag(db.Model):
         secondary=channel_tag_table,
         back_populates="tags",
     )
+
+
+class TagSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Tag

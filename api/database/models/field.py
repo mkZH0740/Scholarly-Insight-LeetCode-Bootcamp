@@ -1,4 +1,4 @@
-from api.database import db
+from api.database import db, ma
 from typing import List
 from sqlalchemy import Integer, String, Text, Column, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -28,3 +28,8 @@ class Field(db.Model):
         secondary=user_subscription_table,
         back_populates="subscribed_fields",
     )
+
+
+class FieldSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Field

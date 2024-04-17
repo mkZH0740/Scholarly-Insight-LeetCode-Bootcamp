@@ -1,4 +1,4 @@
-from api.database import db
+from api.database import db, ma
 from typing import List
 from datetime import datetime
 from sqlalchemy import Integer, Text, DateTime, ForeignKey, Column
@@ -52,3 +52,8 @@ class Channel(db.Model):
         secondary=channel_tag_table,
         back_populates="tagged_to",
     )
+
+
+class ChannelSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Channel

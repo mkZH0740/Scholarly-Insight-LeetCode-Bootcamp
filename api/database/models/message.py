@@ -1,4 +1,4 @@
-from api.database import db
+from api.database import db, ma
 from typing import Optional
 from datetime import datetime
 from sqlalchemy import Integer, Boolean, Text, DateTime, ForeignKey
@@ -33,3 +33,8 @@ class Message(db.Model):
         secondary=channel_message_table,
         back_populates="messages",
     )
+
+
+class MessageSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Message

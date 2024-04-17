@@ -1,4 +1,4 @@
-from api.database import db
+from api.database import db, ma
 from datetime import datetime
 from sqlalchemy import Integer, Text, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -20,3 +20,8 @@ class BrowseHistory(db.Model):
     # back populated fields
     # back populated field referencing the user who created this browse history
     browsed_by: Mapped["User"] = relationship(back_populates="browse_histories")
+
+
+class BrowseHistorySchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = BrowseHistory

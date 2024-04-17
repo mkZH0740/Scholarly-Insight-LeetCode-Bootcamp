@@ -1,7 +1,7 @@
-from .user import User
-from .field import Field
-from .browse_history import BrowseHistory
-from .query_history import QueryParam, QueryHistory
-from .message import Message
-from .channel import Channel
-from .tag import Tag
+from .user import User, UserSchema
+from .field import Field, FieldSchema
+from .browse_history import BrowseHistory, BrowseHistorySchema
+from .query_history import QueryHistory, QueryHistorySchema
+from .message import Message, MessageSchema
+from .channel import Channel, ChannelSchema
+from .tag import Tag, TagSchema

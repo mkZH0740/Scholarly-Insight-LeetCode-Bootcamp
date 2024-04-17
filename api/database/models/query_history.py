@@ -1,4 +1,4 @@
-from api.database import db
+from api.database import db, ma
 from datetime import datetime
 from typing import List
 from sqlalchemy import Integer, Text, DateTime, ForeignKey
@@ -23,6 +23,11 @@ class QueryParam(db.Model):
     belongs_to: Mapped["QueryHistory"] = relationship(back_populates="query_params")
 
 
+class QueryParamSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = QueryParam
+
+
 class QueryHistory(db.Model):
     __tablename__ = "query_history_table"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -41,3 +46,8 @@ class QueryHistory(db.Model):
     query_params: Mapped[List["QueryParam"]] = relationship(back_populates="belongs_to")
     # back populated field referencing the user who created this query history
     queried_by: Mapped["User"] = relationship(back_populates="query_histories")
+
+
+class QueryHistorySchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = QueryHistory
