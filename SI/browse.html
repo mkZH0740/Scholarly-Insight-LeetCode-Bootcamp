@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Articles</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Browse Articles</h1>
+        <p>Explore a wide array of scholarly articles.</p>
+    </header>
+    
+    <nav>
+        <a href="index.html"><button>Home</button></a>
+        <a href="browse.html"><button>Browse Articles</button></a>
+        <a href="account.html"><button>Account</button></a>
+        <a href="forum.html"><button>Forum</button></a>
+    </nav>
+
+
+    <main>
+        <h2>Browse Scholarly Articles</h2>
+        <p>Here you can browse articles by category, author, or publication date.</p>
+    
+        <!-- 搜索栏 -->
+        <form id="searchForm">
+            <input type="text" class="input-filter" id="searchInput" placeholder="Enter search terms, e.g., 'quantum physics'">
+            <input type="text" class="input-filter" id="authorInput" placeholder="Author, e.g., 'Einstein'">
+            <input type="text" class="input-filter" id="categoryInput" placeholder="Category, e.g., 'physics:cond-mat'">
+            <input type="date" class="input-filter" id="dateInput" placeholder="Publication Date">
+            <button type="submit">Search</button>
+        </form>
+    
+        <!-- 显示搜索结果的区域 -->
+        <div id="results"></div>
+    </main>
+    
+    
+    
+    
+
+    <footer>
+        <p>&copy; 2024 Scholarly Insight. All rights reserved.</p>
+    </footer>
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const inputs = document.querySelectorAll('.input-filter');
+            const values = Array.from(inputs).map(input => input.value.trim()).filter(value => value !== '');
+        
+            if (values.length === 0) {
+                alert('Please fill at least one field to start the search.');
+                return;
+            }
+        
+            var searchTerm = document.getElementById('searchInput').value;
+            var author = document.getElementById('authorInput').value;
+            var category = document.getElementById('categoryInput').value;
+            var date = document.getElementById('dateInput').value;
+        
+            var queryParts = [];
+            if (searchTerm) queryParts.push('all:' + encodeURIComponent(searchTerm));
+            if (author) queryParts.push('au:' + encodeURIComponent(author));
+            if (category) queryParts.push('cat:' + encodeURIComponent(category));
+            if (date) {
+                queryParts.push(`submittedDate:[${date}T00:00:00Z+TO+${date}T23:59:59Z]`);
+            }
+        
+            var queryString = queryParts.join('+AND+');
+            var apiUrl = `http://export.arxiv.org/api/query?search_query=${queryString}&start=0&max_results=10`;
+        
+            fetch(apiUrl)
+                .then(response => response.text())
+                .then(data => {
+                    var parser = new DOMParser();
+                    var xml = parser.parseFromString(data, "application/xml");
+                    displayResults(xml);
+                })
+                .catch(error => console.error('Error fetching data: ', error));
+        });
+        
+        function displayResults(xml) {
+            var entries = xml.getElementsByTagName('entry'); 
+            var resultContainer = document.getElementById('results');
+            resultContainer.innerHTML = '';
+        
+            for (var i = 0; i < entries.length; i++) {
+                var title = entries[i].getElementsByTagName('title')[0].textContent;
+                var summary = entries[i].getElementsByTagName('summary')[0].textContent.trim();
+                var published = entries[i].getElementsByTagName('published')[0].textContent.substring(0, 10);
+                var id = entries[i].getElementsByTagName('id')[0].textContent;
+                var authors = entries[i].getElementsByTagName('author');
+                var authorNames = Array.from(authors).map(author => author.getElementsByTagName('name')[0].textContent).join(', ');
+                var categories = Array.from(entries[i].getElementsByTagName('category')).map(cat => cat.getAttribute('term')).join(', ');
+        
+                resultContainer.innerHTML += `<div><h3>${title}</h3><p>Authors: ${authorNames}</p><p>${summary}</p><p>Published on: ${published}</p><p>Categories: ${categories}</p><p><a href="${id}" target="_blank">Read Full Text</a></p></div>`;
+            }
+        }
+        </script>
+        
+        
+</body>
+</html>
