@@ -22,10 +22,19 @@
     <main>
         <h2>Manage Account</h2>
         <p>Update your personal information or change your settings.</p>
+        <input type="text" id="name" placeholder="Name"></input> 
+        <input type="email" id="email" placeholder="Email"></input> 
+        <input type="password" id="password" placeholder="Password"></input> 
     </main>
-
+    <button onclick= "login()">Login</button> 
+    <button onclick = "register()">Register</button>
+   
     <footer>
         <p>&copy; 2024 Scholarly Insight. All rights reserved.</p>
     </footer>
 </body>
+<script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js"></script>
+<script type="module" src="index.js"></script>
+
 </html>
