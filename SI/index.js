@@ -1,5 +1,5 @@
-import {getAuth, signInWithEmailAndPassword ,createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"
+import {getAuth, signInWithEmailAndPassword ,createUserWithEmailAndPassword} from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 
 const firebaseConfig = {
     apiKey: "AIzaSyCQP4HDrOEL7fjf7_C__X5g0qfDEU2ECMU",
@@ -21,9 +21,8 @@ function register()  {  // To be called by HTML
     // Add the element IDs    
     email = document.getElementById('email').value;
     password = document.getElementById('password').value;
-    name = document.getElementById('name').value;
-
-
+    user_name = document.getElementById('name').value;
+    alert('User Created')
 
     createUserWithEmailAndPassword(auth,email,password)
     .then((userCredential)  => {
@@ -32,7 +31,7 @@ function register()  {  // To be called by HTML
         var database_ref= database.ref()
 
         var user_data = {email:email,
-                        name:name,
+                        name:user_name,
                     last_login:Date.now()}
         database_ref.child('users/' + user.uid).set(user_data);
 
@@ -52,8 +51,8 @@ function login(){
 
     email = document.getElementById('email').value;
     password = document.getElementById('password').value;
-
-    auth.signInWithEmailAndPassword(email,password)
+    alert()
+    signInWithEmailAndPassword(email,password)
     .then(function(){
         var user = auth.currentUser
         var database_ref= database.ref()
@@ -63,7 +62,7 @@ function login(){
         
         database_ref.child('users/' + user.uid).update(user_data)
 
-        alert('User Created')
+        alert('User Logged In')
     }).catch(function(error){
         // Firebase errors
         var error_code = error.code
